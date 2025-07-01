@@ -1,6 +1,5 @@
 # Import python packages 
 import streamlit as st 
-from snowflake.snowpark.functions import col, when_matched
 import snowflake.connector
 
 # Write directly to the app 
@@ -43,7 +42,8 @@ if ingredients_list:
 
 import requests
 smoothiefruit_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-st.text(smoothiefruit_response)
+st.text(smoothiefruit_response.json())
+sf_df = st.dataframe(data=smoothiefruit_response, use_container_width=True) 
 
 cur.close()
 cnx.close()
