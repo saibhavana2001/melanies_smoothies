@@ -1,6 +1,7 @@
 # Import python packages 
 import streamlit as st 
-from snowflake.snowpark.functions import col, when_matched 
+from snowflake.snowpark.functions import col, when_matched
+import snowflake.connector
 
 # Write directly to the app 
 st.title(f":cup_with_straw: Customize your Smoothie :cup_with_straw:") 
@@ -9,10 +10,19 @@ name_on_order = st.text_input('Name on your smoothie:')
 
 st.write('The of your smoothie will be: ', name_on_order) 
 
-cnx = st.connection("snowflake")
-session = cnx.session()
+cnx = snowflake.connector.connect(
+    user = 'SAIBHAVANA',
+    password = '9014Bh@vana632',
+    account = 'RDPZUWB-VMB49907'
+)
+cur = cnx.cursor()
 
-my_dataframe = session.table("smoothies.public.fruit_options").select(col('Fruit_name')) 
+cur.execute("Select fruit_name from smoothies.public.fruit_options")
+fruit_options = cur.fetchall()
+
+fruit_names = [row[0] for row in fruit_options]
+
+my_dataframe = fruit_names
 #st.dataframe(data=my_dataframe, use_container_width=True) 
 ingredients_list = st.multiselect( 'Select upto 5 fruits:', my_dataframe, max_selections= 5 ) 
 
@@ -27,5 +37,9 @@ if ingredients_list:
     #st.write(my_insert_stmt) 
     time_to_submit = st.button("Submit Order")
     if time_to_submit: 
-        session.sql(my_insert_stmt).collect() 
+        cur.execute(my_insert_stmt)
+        cnx.commit()
         st.success('Your Smoothie is ordered, ' + name_on_order +'!', icon="✅")
+
+cur.close()
+cnx.close()
