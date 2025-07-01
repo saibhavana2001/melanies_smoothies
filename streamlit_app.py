@@ -15,9 +15,14 @@ cnx = snowflake.connector.connect(
     password = '9014Bh@vana632',
     account = 'RDPZUWB-VMB49907'
 )
-session = cnx.session()
+cur = cnx.cursor()
 
-my_dataframe = session.table("smoothies.public.fruit_options").select(col('Fruit_name')) 
+cur.execute("Select fruit_name from smoothies.public.fruit_options")
+fruit_options = cur.fetchall()
+
+fruit_names = [row[0] for row in fruit_options]
+
+my_dataframe = fruit_names
 #st.dataframe(data=my_dataframe, use_container_width=True) 
 ingredients_list = st.multiselect( 'Select upto 5 fruits:', my_dataframe, max_selections= 5 ) 
 
@@ -32,5 +37,9 @@ if ingredients_list:
     #st.write(my_insert_stmt) 
     time_to_submit = st.button("Submit Order")
     if time_to_submit: 
-        session.sql(my_insert_stmt).collect() 
+        cur.execute(my_insert_stmt)
+        cnx.commit()
         st.success('Your Smoothie is ordered, ' + name_on_order +'!', icon="✅")
+
+cur.close()
+cnx.close()
