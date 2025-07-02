@@ -25,7 +25,7 @@ my_dataframe = pd.DataFrame(fruit_options, columns = ['fruit_name', 'search_on']
 #st.dataframe(data=my_dataframe, use_container_width=True) 
 #st.stop()
 
-st.dataframe(pd_df)
+st.dataframe(my_dataframe)
 st.stop()
 
 ingredients_list = st.multiselect( 'Select upto 5 fruits:', my_dataframe, max_selections= 5 ) 
