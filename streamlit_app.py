@@ -25,7 +25,7 @@ my_dataframe = pd.DataFrame(fruit_options, columns = ['fruit_name', 'search_on']
 #st.dataframe(data=my_dataframe, use_container_width=True) 
 #st.stop()
 
-pd_df = my_dataframe.to_pandas()
+pd_df = my_dataframe
 
 #st.dataframe(pd_df)
 #st.stop()
