@@ -1,6 +1,7 @@
 # Import python packages 
 import streamlit as st 
 import snowflake.connector
+import requests
 
 # Write directly to the app 
 st.title(f":cup_with_straw: Customize your Smoothie :cup_with_straw:") 
@@ -29,21 +30,29 @@ if ingredients_list:
     #st.write(ingredients_list) 
     #st.text(ingredients_list)
     ingredients_string = '' 
+
     for fruit_choosen in ingredients_list: 
         ingredients_string += fruit_choosen + ' ' 
-    st.write(ingredients_string) 
+        smoothiefruit_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+        #st.text(smoothiefruit_response.json())
+        sf_df = st.dataframe(data=smoothiefruit_response.json(), use_container_width=True) 
+
+
+    st.write(ingredients_string)
+
     my_insert_stmt = """insert into smoothies.public.orders(INGREDIENTS, name_on_order) values ('"""+ ingredients_string + """', '""" +name_on_order+"""')""" 
-    #st.write(my_insert_stmt) 
+    
+    #st.write(my_insert_stmt)    
+    
     time_to_submit = st.button("Submit Order")
+    
     if time_to_submit: 
         cur.execute(my_insert_stmt)
         cnx.commit()
         st.success('Your Smoothie is ordered, ' + name_on_order +'!', icon="✅")
 
-import requests
-smoothiefruit_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-#st.text(smoothiefruit_response.json())
-sf_df = st.dataframe(data=smoothiefruit_response.json(), use_container_width=True) 
+
+
 
 cur.close()
 cnx.close()
