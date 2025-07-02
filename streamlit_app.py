@@ -25,8 +25,10 @@ my_dataframe = pd.DataFrame(fruit_options, columns = ['fruit_name', 'search_on']
 #st.dataframe(data=my_dataframe, use_container_width=True) 
 #st.stop()
 
-st.dataframe(my_dataframe)
-st.stop()
+pd_df = my_dataframe.to_pandas()
+
+#st.dataframe(pd_df)
+#st.stop()
 
 ingredients_list = st.multiselect( 'Select upto 5 fruits:', my_dataframe, max_selections= 5 ) 
 
@@ -37,6 +39,10 @@ if ingredients_list:
 
     for fruit_choosen in ingredients_list: 
         ingredients_string += fruit_choosen + ' ' 
+
+        search_on = pd_df.loc[pd_df['fruit_name'] == fruit_choosen, 'search_on'].iloc[0]
+        st.write('the serach value of the fruit choosen is '+search_on)
+
         st.subheader(fruit_choosen + ' Nutrition Information')
         smoothiefruit_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + fruit_choosen)
         #st.text(smoothiefruit_response.json())
