@@ -57,10 +57,13 @@ if ingredients_list:
     
     time_to_submit = st.button("Submit Order")
     
-    if time_to_submit: 
-        cur.execute(my_insert_stmt)
-        cnx.commit()
-        st.success('Your Smoothie is ordered, ' + name_on_order +'!', icon="✅")
+    if name_on_order:
+        if time_to_submit: 
+            cur.execute(my_insert_stmt)
+            cnx.commit()
+            st.success('Your Smoothie is ordered, ' + name_on_order +'!', icon="✅")
+    else:
+        st.write('Please enter a name on your order')
 
 
 
