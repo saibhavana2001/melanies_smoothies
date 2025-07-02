@@ -17,7 +17,7 @@ cnx = snowflake.connector.connect(
 )
 cur = cnx.cursor()
 
-cur.execute("Select fruit_name from smoothies.public.fruit_options")
+cur.execute("Select fruit_name, search_on from smoothies.public.fruit_options")
 fruit_options = cur.fetchall()
 
 fruit_names = [row[0] for row in fruit_options]
@@ -33,7 +33,7 @@ if ingredients_list:
 
     for fruit_choosen in ingredients_list: 
         ingredients_string += fruit_choosen + ' ' 
-        st.subheader(fruit_choosen + 'Nutrition Information')
+        st.subheader(fruit_choosen + ' Nutrition Information')
         smoothiefruit_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + fruit_choosen)
         #st.text(smoothiefruit_response.json())
         sf_df = st.dataframe(data=smoothiefruit_response.json(), use_container_width=True) 
