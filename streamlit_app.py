@@ -21,7 +21,7 @@ cur = cnx.cursor()
 cur.execute("Select fruit_name, search_on from smoothies.public.fruit_options")
 fruit_options = cur.fetchall()
 
-my_dataframe = pd.dataframe(fruit_options, columns = ['fruit_name', 'search_on'])
+my_dataframe = pd.DataFrame(fruit_options, columns = ['fruit_name', 'search_on'])
 #st.dataframe(data=my_dataframe, use_container_width=True) 
 #st.stop()
 
