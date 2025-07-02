@@ -2,6 +2,7 @@
 import streamlit as st 
 import snowflake.connector
 import requests
+import pandas as pd
 
 # Write directly to the app 
 st.title(f":cup_with_straw: Customize your Smoothie :cup_with_straw:") 
@@ -24,6 +25,12 @@ fruit_names = [row[0] for row in fruit_options]
 
 my_dataframe = fruit_names
 #st.dataframe(data=my_dataframe, use_container_width=True) 
+#st.stop()
+
+pd_df = my_dataframe.to_pandas()
+st.dataframe(pd_df)
+st.stop()
+
 ingredients_list = st.multiselect( 'Select upto 5 fruits:', my_dataframe, max_selections= 5 ) 
 
 if ingredients_list: 
